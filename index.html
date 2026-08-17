@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday 😘🎀</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    --umber:#7f5539;
+    --caramel:#b08968;
+    --tan:#ddb892;
+    --sand:#e6ccb2;
+    --cream:#ede0d4;
+    --ink:#4a2f1f;
+    --paper:#fffaf3;
+    --shadow: 0 10px 30px rgba(127,85,57,0.25);
+    --font-display:'Fredoka', sans-serif;
+    --font-body:'Nunito', sans-serif;
+    --font-note:'Caveat', cursive;
+    --font-heading: 'Montserrat'
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:var(--font-body);
+    background:var(--cream);
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+
+  ::selection{background:var(--tan);color:var(--umber);}
+
+  /* scrollbar */
+  ::-webkit-scrollbar{width:10px;}
+  ::-webkit-scrollbar-track{background:var(--cream);}
+  ::-webkit-scrollbar-thumb{background:var(--caramel);border-radius:10px;}
+
+  /* ============ SAKURA PETALS (ambient, global) ============ */
+  #petal-field{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:9999;
+    overflow:hidden;
+  }
+  .petal{
+    position:absolute;
+    top:-5%;
+    width:14px;
+    height:14px;
+    background:radial-gradient(circle at 30% 30%, var(--sand), var(--caramel));
+    border-radius: 0 60% 0 60%;
+    opacity:.85;
+    animation:fall linear infinite;
+    filter: drop-shadow(0 2px 2px rgba(127,85,57,.25));
+  }
+  @keyframes fall{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);}
+    100%{transform:translateY(110vh) translateX(40px) rotate(360deg);}
+  }
+
+  /* ============ LOADER ============ */
+  #loader{
+    position:fixed;
+    inset:0;
+    z-index:1000;
+    background:
+      radial-gradient(circle at 20% 20%, var(--sand) 0%, transparent 45%),
+      radial-gradient(circle at 80% 80%, var(--tan) 0%, transparent 45%),
+      linear-gradient(160deg, var(--cream), var(--sand) 60%, var(--tan));
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:24px;
+    transition:opacity .9s ease, visibility .9s ease;
+  }
+  #loader.hide{
+    opacity:0;
+    visibility:hidden;
+    pointer-events:none;
+  }
+
+  /* Chakra spiral - a gentle nod to a certain orange ninja's spirit, drawn simply */
+  .chakra-wrap{
+    position:relative;
+    width:170px;
+    height:170px;
+    margin-bottom:18px;
+  }
+  .chakra{
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    background:
+      conic-gradient(from 0deg, var(--umber), var(--caramel), var(--tan), var(--sand), var(--umber));
+    animation:spin 5s linear infinite;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .chakra::before{
+    content:"";
+    position:absolute;
+    inset:14px;
+    border-radius:50%;
+    background:var(--paper);
+  }
+  .chakra-core{
+    position:absolute;
+    inset:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:52px;
+    animation:pulse 1.6s ease-in-out infinite;
+  }
+
+   .chakra-core img{
+    height: 300px;
+    width: 300px;
+    border-radius: 50%;
+   }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  @keyframes pulse{
+    0%,100%{transform:scale(1);}
+    50%{transform:scale(1.12);}
+  }
+
+  /* two illustrated characters (original SVG art, not copied from any source) - with an
+     optional slot for the user's own real photos to override them entirely */
+  .duo{
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .char{
+    position:relative;
+    width:96px;
+    height:130px;
+    animation:bob 2.6s ease-in-out infinite;
+  }
+  .char.right{animation-delay:.35s;}
+  .char svg{
+    width:100%;
+    height:100%;
+    filter:drop-shadow(0 8px 12px rgba(127,85,57,.3));
+  }
+  /* real photo slot: drop a file at images/him.png or images/her.png and it
+     will automatically appear here instead of the illustration */
+  .char .photo-slot{
+    position:absolute;
+    inset:0;
+    border-radius:50%;
+    overflow:hidden;
+    opacity:0;
+    transition:opacity .4s ease;
+  }
+  .char .photo-slot.loaded{opacity:1;}
+  .char .photo-slot.loaded ~ svg{opacity:0;}
+  .char .photo-slot img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+  .heart-between{
+    align-self:center;
+    font-size:22px;
+    margin-bottom:36px;
+    animation:pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes bob{
+    0%,100%{transform:translateY(0);}
+    50%{transform:translateY(-8px);}
+  }
+
+  .loader-eyebrow{
+    font-family:var(--font-note);
+    font-size:22px;
+    color:var(--umber);
+    letter-spacing:1px;
+  }
+  .loader-title{
+    /* font-family:var(--font-display); */
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:700;
+    font-size:clamp(30px, 6vw, 56px);
+    color:var(--umber);
+    margin:6px 0 4px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:.15em;
+  }
+  .loader-title span{
+    display:inline-block;
+    opacity:0;
+    transform:translateY(18px) rotate(-4deg);
+    animation:letterUp .6s cubic-bezier(.2,.9,.3,1.4) forwards;
+  }
+  @keyframes letterUp{
+    to{opacity:1; transform:translateY(0) rotate(0deg);}
+  }
+  .loader-sub{
+    font-family:var(--font-note);
+    font-size:24px;
+    color:var(--caramel);
+    max-width:420px;
+    margin:6px auto 22px;
+    opacity:0;
+    animation:fadeUp 1s ease forwards;
+    animation-delay:2.1s;
+  }
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(10px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .progress-track{
+    width:min(260px, 70vw);
+    height:8px;
+    background:rgba(127,85,57,.15);
+    border-radius:10px;
+    overflow:hidden;
+    margin-bottom:26px;
+  }
+  .progress-fill{
+    height:100%;
+    width:0%;
+    background:linear-gradient(90deg, var(--umber), var(--caramel));
+    border-radius:10px;
+    animation:load 3.4s ease forwards;
+  }
+  @keyframes load{to{width:100%;}}
+
+  #continue-btn{
+    font-family:var(--font-display);
+    font-size:17px;
+    font-weight:600;
+    letter-spacing:.5px;
+    color:var(--paper);
+    background:linear-gradient(135deg, var(--umber), var(--caramel));
+    border:none;
+    padding:14px 34px;
+    border-radius:50px;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    opacity:0;
+    transform:translateY(14px) scale(.9);
+    animation:popIn .7s ease forwards;
+    animation-delay:3.5s;
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  #continue-btn:hover{
+    transform:translateY(-3px) scale(1.04);
+    box-shadow:0 14px 34px rgba(127,85,57,.35);
+  }
+  #continue-btn:active{transform:translateY(0) scale(.97);}
+  @keyframes popIn{
+    to{opacity:1; transform:translateY(0) scale(1);}
+  }
+  .btn-note{
+    display:block;
+    font-family:var(--font-note);
+    font-size:15px;
+    color:var(--umber);
+    margin-top:10px;
+    opacity:0;
+    animation:fadeUp .8s ease forwards;
+    animation-delay:3.8s;
+  }
+
+  /* ============ MAIN PAGE ============ */
+  #main-page{
+    display:none;
+    position:relative;
+  }
+  #main-page.show{display:block;}
+
+  /* ============ BACKGROUND LAYER (video + animated fallback) ============ */
+  #bg-layer{
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    overflow:hidden;
+    background:linear-gradient(180deg, var(--sand) 0%, var(--tan) 55%, var(--caramel) 100%);
+  }
+
+  #bg-video{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    transition:opacity 1.2s ease;
+  }
+  #bg-video.playing{opacity:1;}
+
+  /* warm wash so text always stays readable, on top of video or CSS scene */
+  #bg-wash{
+    position:fixed;
+    inset:0;
+    z-index:-1;
+    background:linear-gradient(180deg,
+      rgba(237,224,212,.92) 0%,
+      rgba(237,224,212,.86) 12%,
+      rgba(230,204,178,.55) 40%,
+      rgba(176,137,104,.55) 75%,
+      rgba(127,85,57,.72) 100%);
+    pointer-events:none;
+  }
+
+  /* --- CSS animated fallback scene (shown when no video file is found) --- */
+  #css-scene{
+    position:absolute;
+    inset:0;
+    opacity:0;
+    transition:opacity 1s ease;
+  }
+  #css-scene.active{opacity:1;}
+
+  .chakra-glow{
+    position:absolute;
+    top:12%;
+    left:50%;
+    width:520px;
+    height:520px;
+    transform:translateX(-50%);
+    border-radius:50%;
+    background:radial-gradient(circle, rgba(176,137,104,.55) 0%, rgba(221,184,146,.25) 45%, transparent 70%);
+    animation:glowPulse 6s ease-in-out infinite;
+    filter:blur(6px);
+  }
+  @keyframes glowPulse{
+    0%,100%{opacity:.6; transform:translateX(-50%) scale(1);}
+    50%{opacity:1; transform:translateX(-50%) scale(1.12);}
+  }
+
+  .cloud{
+    position:absolute;
+    background:var(--paper);
+    opacity:.55;
+    border-radius:50px;
+    filter:blur(1px);
+    animation:driftCloud linear infinite;
+  }
+  .cloud::before, .cloud::after{
+    content:"";
+    position:absolute;
+    background:var(--paper);
+    border-radius:50%;
+  }
+  @keyframes driftCloud{
+    from{transform:translateX(-20vw);}
+    to{transform:translateX(120vw);}
+  }
+
+  .skyline{
+    position:absolute;
+    bottom:0;
+    left:0;
+    width:100%;
+    height:32vh;
+    background:var(--umber);
+    clip-path:polygon(
+      0% 100%, 0% 55%, 6% 45%, 12% 60%, 18% 30%, 24% 55%,
+      30% 40%, 36% 65%, 42% 35%, 48% 58%, 54% 42%, 60% 62%,
+      66% 38%, 72% 55%, 78% 33%, 84% 60%, 90% 45%, 96% 58%, 100% 50%, 100% 100%
+    );
+    opacity:.85;
+  }
+  .skyline::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:var(--caramel);
+    opacity:.25;
+  }
+
+  .leaf-drift{
+    position:absolute;
+    top:-8%;
+    font-size:20px;
+    animation:leafFall linear infinite;
+    opacity:.8;
+  }
+  @keyframes leafFall{
+    0%{transform:translateY(-10vh) translateX(0) rotate(0deg);}
+    100%{transform:translateY(115vh) translateX(-60px) rotate(340deg);}
+  }
+
+  .section{
+    position:relative;
+    padding:110px 20px;
+    max-width:1100px;
+    margin:0 auto;
+  }
+
+  /* HERO */
+  .hero{
+    min-height:92vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:60px 20px;
+    background:
+      radial-gradient(circle at 15% 10%, var(--sand) 0%, transparent 40%),
+      radial-gradient(circle at 85% 90%, var(--tan) 0%, transparent 40%);
+  }
+  .hero .kicker{
+    font-family:var(--font-note);
+    font-size:26px;
+    color:var(--caramel);
+    margin-bottom:8px;
+  }
+  .hero h1{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:600;
+    font-size:clamp(38px, 8vw, 84px);
+    color:var(--umber);
+    line-height:1.05;
+  }
+  .hero h1 em{
+    font-style:normal;
+    color:var(--caramel);
+  }
+  .hero p.lead{
+    font-size:19px;
+    max-width:560px;
+    margin:22px auto 0;
+    color:var(--ink);
+    line-height:1.7;
+  }
+  .ribbon-symbol{
+    width:64px;height:64px;
+    margin:26px auto 0;
+    border-radius:50%;
+    background:conic-gradient(from 0deg, var(--umber), var(--caramel), var(--tan), var(--sand), var(--umber));
+    animation:spin 6s linear infinite;
+    position:relative;
+    box-shadow:var(--shadow);
+  }
+  .ribbon-symbol::before{
+    content:"";
+    position:absolute;inset:9px;
+    border-radius:50%;
+    background:var(--cream);
+  }
+  .scroll-hint{
+    margin-top:46px;
+    font-family:var(--font-note);
+    font-size:18px;
+    color:var(--umber);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+    animation:bob 2s ease-in-out infinite;
+  }
+  .scroll-hint .arrow{font-size:22px;}
+
+  /* section headers, reused */
+  .section-head{
+    text-align:center;
+    margin-bottom:56px;
+  }
+  .section-head .tag{
+    font-family:var(--font-note);
+    font-size:22px;
+    color:var(--caramel);
+  }
+  .section-head h2{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-weight:600;
+    font-size:clamp(28px,5vw,46px);
+    color:var(--umber);
+    margin-top:2px;
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(50px);
+    transition:opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1);
+  }
+  .reveal.in-view{
+    opacity:1;
+    transform:translateY(0);
+  }
+  .reveal.delay-1{transition-delay:.12s;}
+  .reveal.delay-2{transition-delay:.24s;}
+  .reveal.delay-3{transition-delay:.36s;}
+
+  /* MEMORY GALLERY - polaroid style placeholders */
+  .gallery-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:34px;
+  }
+  .polaroid{
+    background:var(--paper);
+    padding:14px 14px 54px;
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    transform:rotate(var(--tilt, -3deg));
+    transition:transform .35s ease, box-shadow .35s ease;
+    position:relative;
+  }
+  .polaroid:nth-child(2n){--tilt:3deg;}
+  .polaroid:nth-child(3n){--tilt:-1.5deg;}
+  .polaroid:nth-child(4n){--tilt:2deg;}
+  .polaroid:hover{
+    transform:rotate(0deg) translateY(-8px) scale(1.03);
+    box-shadow:0 20px 40px rgba(127,85,57,.35);
+    z-index:2;
+  }
+  .polaroid .frame{
+    aspect-ratio:1/1;
+    border-radius:2px;
+    background:
+      repeating-linear-gradient(135deg, var(--sand), var(--sand) 10px, var(--tan) 10px, var(--tan) 20px);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    position:relative;
+  }
+  /* Replace this <img> src (or the whole .frame div background) with your own photo of him! */
+  .polaroid .frame img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+  .polaroid .frame .placeholder-label{
+    font-family:var(--font-body);
+    font-weight:800;
+    font-size:13px;
+    color:var(--paper);
+    background:rgba(127,85,57,.55);
+    padding:6px 10px;
+    border-radius:20px;
+    text-align:center;
+    backdrop-filter:blur(2px);
+  }
+  .polaroid .tape{
+    position:absolute;
+    top:-10px;
+    left:50%;
+    transform:translateX(-50%) rotate(-4deg);
+    width:70px;height:22px;
+    background:rgba(221,184,146,.75);
+    border:1px solid rgba(127,85,57,.25);
+  }
+  .polaroid figcaption{
+    font-family:var(--font-note);
+    font-size:19px;
+    color:var(--umber);
+    text-align:center;
+    margin-top:12px;
+  }
+
+  /* TIMELINE / SCROLL PATH */
+  .timeline{
+    position:relative;
+    padding-left:26px;
+    border-left:3px dashed var(--caramel);
+  }
+  .timeline-item{
+    position:relative;
+    margin-bottom:54px;
+    padding-left:24px;
+  }
+  .timeline-item:last-child{margin-bottom:0;}
+  .timeline-item::before{
+    content:"";
+    position:absolute;
+    left:-38px;
+    top:4px;
+    width:16px;height:16px;
+    border-radius:50%;
+    background:var(--umber);
+    box-shadow:0 0 0 5px var(--cream), 0 0 0 7px var(--tan);
+  }
+  .timeline-item h3{
+    font-family:var(--font-display);
+    color:var(--umber);
+    font-size:22px;
+    margin-bottom:6px;
+  }
+  .timeline-item .love-note{
+    background:var(--paper);
+    border-radius:14px;
+    padding:20px 22px;
+    box-shadow:var(--shadow);
+    position:relative;
+  }
+  .timeline-item .love-note::before{
+    content:"❝";
+    font-family:var(--font-note);
+    font-size:40px;
+    color:var(--tan);
+    position:absolute;
+    top:-6px;
+    left:14px;
+    line-height:1;
+  }
+  .timeline-item .love-note p{
+    font-family:var(--font-note);
+    font-size:21px;
+    line-height:1.5;
+    color:var(--ink);
+    /* ✍️ Write your own paragraph for him here! */
+  }
+
+  /* MESSAGE CARDS on scroll */
+  .messages-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+    gap:28px;
+  }
+  .msg-card{
+    background:var(--paper);
+    border-radius:18px;
+    padding:28px 24px;
+    box-shadow:var(--shadow);
+    border-top:5px solid var(--caramel);
+    position:relative;
+    overflow:hidden;
+  }
+  .msg-card::after{
+    content:"🍂";
+    position:absolute;
+    right:14px;
+    bottom:10px;
+    font-size:26px;
+    opacity:.5;
+  }
+  .msg-card h3{
+    font-family:var(--font-display);
+    color:var(--umber);
+    font-size:20px;
+    margin-bottom:10px;
+  }
+  .msg-card p{
+    font-family:var(--font-note);
+    font-size:20px;
+    line-height:1.55;
+    color:var(--ink);
+    /* ✍️ Editable love paragraph placeholder */
+  }
+
+  /* WISH / SIGNATURE closing */
+  .closing{
+    text-align:center;
+    padding-bottom:140px;
+  }
+  .closing .big-heart{
+    font-size:60px;
+    animation:pulse 1.5s ease-in-out infinite;
+    margin-bottom:14px;
+  }
+
+    .closing .big-heart img{
+      height: 180px;
+      border-radius: 50%;
+      border: 8px solid var(--ink);
+    }
+  .closing h2{
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size:clamp(26px,5vw,44px);
+    color:var(--umber);
+  }
+  .closing p{
+    font-family:var(--font-note);
+    font-size:22px;
+    color:var(--cream);
+    max-width:520px;
+    margin:14px auto 0;
+    line-height:1.5;
+  }
+  .signature{
+    margin-top:34px;
+    font-family:var(--font-note);
+    font-size:26px;
+    color:var(--umber);
+  }
+
+  footer{
+    text-align:center;
+    padding:26px;
+    font-size:13px;
+    color:var(--caramel);
+    background:var(--sand);
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important;}
+  }
+
+  @media (max-width:600px){
+    .section{padding:80px 16px;}
+    .timeline{padding-left:18px;}
+    .timeline-item{padding-left:16px;}
+    .timeline-item::before{left:-28px;}
+  }
+</style>
+</head>
+<body>
+
+<div id="petal-field"></div>
+
+<!-- ================= LOADER ================= -->
+<div id="loader">
+  <!-- <div class="loader-eyebrow">a little scroll of chakra and love, for...</div> -->
+
+  <div class="chakra-wrap">
+    <div class="chakra"></div>
+    <div class="chakra-core"> <img src="image2.jpg" alt=""></div>
+  </div>
+
+  <div class="duo">
+    <div class="char left">
+      <!-- <div class="photo-slot" id="photoSlotHim"><img src="image1.png" alt="" onerror="this.closest('.photo-slot').remove()" onload="this.closest('.photo-slot').classList.add('loaded')"></div>
+      <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg"> -->
+        <!-- <defs>
+          <linearGradient id="skinHim" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f2c9a0"/>
+            <stop offset="100%" stop-color="#e0ab78"/>
+          </linearGradient>
+          <linearGradient id="jacketHim" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#b08968"/>
+            <stop offset="100%" stop-color="#7f5539"/>
+          </linearGradient>
+          <linearGradient id="hairHim" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ddb892"/>
+            <stop offset="100%" stop-color="#b08968"/>
+          </linearGradient>
+        </defs> -->
+        <!-- body -->
+        <path d="M28 128 Q26 90 34 78 Q50 68 66 78 Q74 90 72 128 Z" fill="url(#jacketHim)"/>
+        <!-- headband strap -->
+        <rect x="26" y="46" width="48" height="9" rx="4" fill="var(--umber)"/>
+        <circle cx="50" cy="50" r="6" fill="var(--sand)" stroke="var(--umber)" stroke-width="1.5"/>
+        <!-- swirl mark, generic spiral not tied to any single franchise -->
+        <path d="M50 47.5 a2.5 2.5 0 1 1 -2.5 2.5" fill="none" stroke="var(--umber)" stroke-width="1.2"/>
+        <!-- face -->
+        <circle cx="50" cy="34" r="24" fill="url(#skinHim)"/>
+        <!-- spiky hair -->
+        <path d="M22 30 Q18 6 34 10 Q38 -2 48 8 Q54 -2 62 8 Q74 4 72 22 Q80 24 74 34
+                 Q78 20 66 16 Q64 8 56 14 Q52 4 46 14 Q40 6 36 16 Q26 12 26 26 Q20 24 22 30 Z"
+              fill="url(#hairHim)"/>
+        <!-- whisker marks -->
+        <path d="M34 40 q6 2 10 0 M56 40 q6 2 10 0" stroke="var(--umber)" stroke-width="1.3" fill="none" stroke-linecap="round" opacity=".55"/>
+        <!-- eyes -->
+        <circle cx="42" cy="34" r="2.6" fill="var(--umber)"/>
+        <circle cx="58" cy="34" r="2.6" fill="var(--umber)"/>
+        <!-- smile -->
+        <path d="M43 42 Q50 47 57 42" stroke="var(--umber)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- <div class="heart-between">💗</div> -->
+
+    <div class="char right">
+      <!-- <div class="photo-slot" id="photoSlotHer"><img src="images/her.png" alt="" onerror="this.closest('.photo-slot').remove()" onload="this.closest('.photo-slot').classList.add('loaded')"></div> -->
+      <!-- <svg viewBox="0 0 100 130" xmlns="http://www.w3.org/2000/svg"> -->
+        <!-- <defs>
+          <linearGradient id="skinHer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f5d5b0"/>
+            <stop offset="100%" stop-color="#e6ccb2"/>
+          </linearGradient>
+          <linearGradient id="jacketHer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#ddb892"/>
+            <stop offset="100%" stop-color="#b08968"/>
+          </linearGradient>
+          <linearGradient id="hairHer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#5b3a26"/>
+            <stop offset="100%" stop-color="#3a241785"/>
+          </linearGradient>
+        </defs> -->
+        <!-- body -->
+        <path d="M30 128 Q28 92 36 80 Q50 70 64 80 Q72 92 70 128 Z" fill="url(#jacketHer)"/>
+        <!-- collar -->
+        <path d="M40 80 Q50 90 60 80 L56 76 Q50 82 44 76 Z" fill="var(--paper)" opacity=".8"/>
+        <!-- long hair back layer -->
+        <path d="M24 34 Q20 70 28 96 Q34 100 36 90 Q30 60 30 34 Z" fill="url(#hairHer)"/>
+        <path d="M76 34 Q80 70 72 96 Q66 100 64 90 Q70 60 70 34 Z" fill="url(#hairHer)"/>
+        <!-- face -->
+        <circle cx="50" cy="34" r="23" fill="url(#skinHer)"/>
+        <!-- hair top + soft bangs -->
+        <path d="M27 30 Q24 6 50 6 Q76 6 73 30 Q70 16 50 16 Q30 16 27 30 Z" fill="url(#hairHer)"/>
+        <path d="M34 24 Q38 34 34 40 M66 24 Q62 34 66 40" stroke="url(#hairHer)" stroke-width="5" fill="none" stroke-linecap="round"/>
+        <!-- eyes, soft lavender-brown to stay in palette -->
+        <circle cx="42" cy="34" r="3" fill="#8a6a52"/>
+        <circle cx="58" cy="34" r="3" fill="#8a6a52"/>
+        <!-- blush -->
+        <circle cx="36" cy="40" r="3.2" fill="var(--sand)" opacity=".8"/>
+        <circle cx="64" cy="40" r="3.2" fill="var(--sand)" opacity=".8"/>
+        <!-- gentle smile -->
+        <path d="M44 43 Q50 47 56 43" stroke="var(--umber)" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+  </div>
+
+  <h1 class="loader-title" id="loaderTitle"></h1>
+  <p class="loader-sub">from your Hinata, who's been rooting for you since forever</p>
+
+  <div class="progress-track"><div class="progress-fill"></div></div>
+
+  <button id="continue-btn">Tape here Lovieeee🤍</button>
+  <span class="btn-note">tap to begin the journey</span>
+</div>
+
+<!-- ================= MAIN PAGE ================= -->
+<div id="main-page">
+
+  <!-- Background: real video if available, otherwise an animated Leaf-Village-inspired scene -->
+  <div id="bg-layer">
+    <!--
+      🎥 TO ADD YOUR OWN VIDEO:
+      1. Create a folder called "videos" next to this HTML file.
+      2. Put a clip you have the rights to use in there, named "naruto-hinata.mp4"
+         (only use footage you're legally allowed to use — e.g. your own recording).
+      3. That's it — this <video> tag will find it automatically and play it on loop.
+      If no file is found, the animated Leaf Village scene below plays instead, so the
+      page never looks broken.
+    -->
+    <video id="bg-video" autoplay muted loop playsinline preload="none">
+      <source src="videos/naruto-hinata.mp4" type="video/mp4">
+      <source src="videos/naruto-hinata.webm" type="video/webm">
+    </video>
+
+    <div id="css-scene">
+      <div class="chakra-glow"></div>
+      <div class="skyline"></div>
+    </div>
+  </div>
+  <div id="bg-wash"></div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="kicker">Leaf Village presents...</div>
+    <h1>Happy Birthday, <em>Zaid</em> 🍥</h1>
+    <p class="lead">
+      Every hero needs someone cheering from the sidelines — today, this whole village stops
+      to celebrate you. Scroll down for a little walk through your story, written with love.
+    </p>
+    <div class="ribbon-symbol"></div>
+    <div class="scroll-hint">
+      <span>unroll the scroll</span>
+      <span class="arrow">↓</span>
+    </div>
+  </section>
+
+  <!-- MEMORY GALLERY -->
+  <section class="section" id="gallery">
+    <div class="section-head reveal">
+      <div class="tag">chapter one</div>
+      <h2>From Tiny Ninja to Hokage-in-Training</h2>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- 👇 Each .frame is a placeholder. Replace the div's background/label with an <img src="your-photo.jpg" alt="..."> -->
+      <figure class="polaroid reveal">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him1.jpeg" alt=""></span>
+        </div>
+        <figcaption>the initial days</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal delay-1">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him2.jpeg" alt=""></span>
+        </div>
+        <figcaption>the tiny troublemaker</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal delay-2">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him4.jpeg" alt=""></span>
+        </div>
+        <figcaption>growing up fast</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal delay-3">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him3.jpeg" alt=""></span>
+        </div>
+        <figcaption>academic days</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him5.jpeg" alt=""></span>
+        </div>
+        <figcaption>nothing to say</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal delay-1">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="Us.jpeg" alt="">e</span>
+        </div>
+        <figcaption>us, always</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal delay-2">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him7.jpeg" alt=""></span>
+        </div>
+        <figcaption>today</figcaption>
+      </figure>
+
+      <figure class="polaroid reveal delay-3">
+        <div class="tape"></div>
+        <div class="frame">
+          <span class="placeholder-label"><img src="him8.jpeg" alt=""></span>
+        </div>
+        <figcaption>the one I love most <br> (iykyk) </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- TIMELINE / LOVE NOTES -->
+  <section class="section" id="story">
+    <div class="section-head reveal">
+      <div class="tag">chapter two</div>
+      <h2>A Few Pages From Your Love With Love</h2>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <!-- <h3>How it started</h3> -->
+        <div class="love-note">
+          <p>
+            Zaid sabse pehle to I'm sorrieeeeee sab cheezon ke liye mujhe pata hai meri hi ghalati rahi hogi jazbaati hojati hun me or ghalat time pe sab kuch olfol hojata hai meri jawnnn mujhe maaf karna awpp🥺. Zaid koi intention nahi thi wese itne khaas din ye sab karne ki or har saal hojata hai pata nahi kiun isi time pe, Zaid me sach me khud bhi pareeshan thi pata nahi ye website me complete kar paun ya nahi abhi itna kam time reh gaya hai or mujhe ab tak kuch nahi pata kiunke me hi intezaar me thi ke karloon gi araam se, mujhe kal bohot ziyada tention hogai thi kiunke phir bohot lamba time lag jata hai net theek hone me Zaid🥺. Meri taraf se jo jo khata hoi hai sab se pehle unsab ke liye maafi chaahti hun me phir hi agey continue karungi Zaid🥺.
+Zaid ab to barey hogaye hain naww mujhse 1 saal phirse to barey samajh ke maaf karden mujhe???🥺😗
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal delay-1">
+        <!-- <h3>A memory I'll never forget</h3> -->
+        <div class="love-note">
+          <p>
+            [Happy 19th Birthday Zaid🥺😘🤍. Ye 19 likhte hi mujhe aese goosebumps agaye I can't believe ke itna sara time itna jaldi nikal gaya hai bacche the chotu she hum school jate the or ab inne barey hogaye hain wobhi saath saath🥺. Kesa lagta hai naww ke ab barey hogaye hain I know aapko nahi hogi aaj ki itni ziyada excitement kiunke mujhe bhi nahi thi apne birthday ki lekin mere liye to aaj ka ye din pichle 18 saal se bohot khaas hai (19 is lie nahi kiunke us waqt me hi nahi thii)👀🤭💋. Mene pichle saal socha tha aapki 18th birthday to at least aapke saath mil ke celebrate karungi wo nahi ho paya... phir socha 19th karungi or yebhi nahi hua mumkin is saal but agle saal pakka mil ke celebrate karen ge bass zidd hai meri kiunke me aapse pyaar karti hun or aapki har cheez ke liye bohot ziyada excited hun me occayyy??🥺🌹
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal delay-2">
+        <!-- <h3>What he means to me</h3> -->
+        <div class="love-note">
+          <p>
+            Umhmmm umhmmm umhmmm meri jawnnn sirf ye thori celebrate karna hai milke meri jawn ki to or bhi bohot si kamiyaabian hain👀🥺❤. Zaiddd I'm so proud of you itnj si umar me aapne bohot kuch kar dikhaya hai, aapne bohot si cheezen jeet li hain, aapne bohot si kamiyaabian hasil karli hain, mujhe aap pe bohot fakhar hai Zaid, rashk hai apni qismat pe ke mujhe mard ke naam pe (MARD) mila hai🥺🎀, haan bass kabhi kabhi sanak jata hai ye MARD olfol hojata hai lekin phir me ussey sorry bulwa hi leti hun kuch bhi karke or sab set hojata hai👀😁💋. I love you meri jawnnn bohot sara pyaar apne munne ke liye, abhi to bohot agey jana hai meri jawn ne Allah aapko bohot kamiyaab karega Zaid kiunke aap me lagan hai kuch karne ki, aap zindagi me shortcuts ka sahara nahi lete or yahi to twist hai life ka jo isey samajh gaya wo sab karleta hai and you did it bacchawww..... Your Girl Is So Proud Of Youuuuuuu<<<<<<🥺💌🤞🏻.
+          </p>
+        </div>
+      </div>
+
+            <div class="timeline-item reveal delay-2">
+        <!-- <h3>What he means to me</h3> -->
+        <div class="love-note">
+          <p>
+            Oyeeee gande bacche ek or baat hawnnn me nawww aapse bohot ziyada pyaar karti hun matlab bohot hi ziyada orr ye mene aapko islie bataya hai ke kisi shak me nahi rehna ke me chali jaungi to aap ayyashi karoge  (maa ke laadley disposable)😠✌🏻.
+Me aapke shalwar ke narey se latak ke chalungi sari zindagi orr flex marungi ke dekho ye mera shohar hai or me iskey narey ka phanda hun jo koi bhi iske qareeb ayega yahein se laat maar dun giii🥺😁🌚.. Orrr hawnnn aapko naww darne ki bhi koi zaroorat nahi hai bhaley se aap barey aadmi ban gaye ho aap ke bohot se dushman honge naww to aap bilkul ghabrana nahi me hun naww sabki piti piti kardungi apne CHAKRA se👀😁✌🏻 (Awpki Hinata aapse bohot pyaar karti hai Naruto aapko to pata hai naww 1st episode se hennnawww awp hi ghaans nahi daalte uspe👀)..... Khair jobhi ho me hun hamesha saath akhri damm takk rahungi chahey kuch bhi hojae Zaid chahey dunia hojae hamarey khilaaf meri aakhri manzil awpka bed hai me wahan takk puhanch ke hi rahungi mmmmmmuwahhhhhhhhhhhh mmmmmmuwahhhhhhhhhhhh🥺😗💋
+          </p>
+        </div>
+      </div>
+
+      <div class="timeline-item reveal delay-3">
+        <!-- <h3>What I wish for him</h3> -->
+        <div class="love-note">
+          <p>
+            Zaiddddd abhi bashh meko last me ye bolna tha ke bohot tang kardeti hun me kabhi kabhi aapko or aapke naak me dumm bhi kardeti hun khaas torr pe aapke office wale time me, dimagh bhi bohot kharab karti hun aapka orr aapka mood bhi sara deti hun apni olfol harkaton se, un sab ke lie sholieeeeeee????🥺👉👈 Orr mene aapse ye kehna tha Zaid ke me ayenda or tang karungi aesehi satatey rahungi kiunke bashh aap hi to ho mere paas to mene Sorrieeeeee to boldia pyaar me lekin there is no going backkk🥺🎗. Kabhi tang mat ana mere pagal pann se ek tu hi to hai meri Zindagi ka asaasa, me ye bhi nahi kahungi ke aakhri asaasa kiunke tu waahid hai Zaiddd🥺. Meri Zindagi tujhse shuru or tujhpe khatam hai🥺🐥🎀. Lekin phirbheee agar serious matters pe badtameezi karne ki baat hai orr behes karne ki baat hai to me tahey dil se maafi mangti hun I'm sholieeeeeeee sholieeeeeee and I am trying my best to make myself better hehehee I love you, do you love me too?🥺😁💌💘
+]
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MESSAGE CARDS -->
+  <section class="section" id="messages">
+    <div class="section-head reveal">
+      <div class="tag">chapter three</div>
+      <h2>A little reminder, for my little boiii</h2>
+    </div>
+
+    <div class="messages-grid">
+      <div class="msg-card reveal">
+        <!-- <h3>🍃 On being brave</h3> -->
+        <p>Zaid abhi naa bohot azmaye gi zindagi, bohot si azmaish ayen gi bass aap haar mat manna or datey rehna uspe jo aap karrahe ho. Or aap sure rehna apne har step pe ke mene jo kiya wo bilkul theek kia, kabhi kisi se mashwarah naa lena kiunke koi nahi chahta ke aap agey jaow.</p>
+      </div>
+      <div class="msg-card reveal delay-1">
+        <!-- <h3>🦊 On being you</h3> -->
+        <p>Zaid me hamesha se yahi kehti hun ke aap wo nahi banna kabhi jo aap nahi ho, kiunke me jaanti hun apne Zaid ko acche se Zaid kabhi kisi ke rang me mat dhalna bass hamesha wo baney rehna jo asli Zaid hai kiunke usi se mohabbat hai mujhe🥺🎀🤍</p>
+      </div>
+      <div class="msg-card reveal delay-2">
+        <!-- <h3>💗 On our friendship</h3> -->
+        <p>Hamarey darmian bohot naa ittefaqi peda hone lagi hai Zaid, bass kuch bhi hojae ye baat yaad rakhna ke hum dono ne hamesha saath rehna hai or iske elawa or koi option nahi.🥺</p>
+      </div>
+      <div class="msg-card reveal delay-3">
+        <!-- <h3>🎂 On today</h3> -->
+        <p>I am so proud of you Zaid, kabhi khudko doosrey se compare nahi kariega kabhi khud ko kam mat samajhiega kisi se kiunke heere ko usla maalik hi pehchaan sakta haiii👀😁😘</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CLOSING -->
+  <section class="section closing">
+    <div class="reveal">
+      <div class="big-heart"><img src="image2.jpg" alt=""></div>
+      <h2>Happy Birthday, Naruto.</h2>
+      <p>
+        Jawnuu manuuu kabhi mat sochna aapka koi nahi hai, koi nahi samajhta aapko ya koi aapka dost nahi, kiunke me hun naww aapka sab kuch nahi ghabrana soch kar ke aap tanha ho me sab se pehle aapki dost or aapka humdard hun🥺😘🤍. Kuch bhi baat ho dono mil ke hal karen ge har cheez kabhi mujhse mat chupana kuch okieeeee????🥺🌷⭐
+      </p>
+      <div class="signature">— always your Hinata 🍥</div>
+    </div>
+  </section>
+
+  <footer>
+    made with 💗 and a little chakra, just for him
+  </footer>
+</div>
+
+<script>
+  // ---------- Loader title, letter by letter ----------
+  const title = "Happy Birthday!";
+  const titleEl = document.getElementById('loaderTitle');
+  [...title].forEach((ch, i) => {
+    const span = document.createElement('span');
+    span.textContent = ch === " " ? "\u00A0" : ch;
+    span.style.animationDelay = (0.15 + i * 0.05) + "s";
+    titleEl.appendChild(span);
+  });
+
+  // ---------- Sakura petal field ----------
+  const petalField = document.getElementById('petal-field');
+  const PETAL_COUNT = 22;
+  for (let i = 0; i < PETAL_COUNT; i++) {
+    const p = document.createElement('div');
+    p.className = 'petal';
+    const size = 8 + Math.random() * 10;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.left = Math.random() * 100 + 'vw';
+    const duration = 9 + Math.random() * 10;
+    p.style.animationDuration = duration + 's';
+    p.style.animationDelay = (Math.random() * duration) + 's';
+    p.style.opacity = 0.5 + Math.random() * 0.4;
+    petalField.appendChild(p);
+  }
+
+  // ---------- Continue button ----------
+  const loader = document.getElementById('loader');
+  const mainPage = document.getElementById('main-page');
+  document.getElementById('continue-btn').addEventListener('click', () => {
+    loader.classList.add('hide');
+    mainPage.classList.add('show');
+    document.body.style.overflow = 'auto';
+    initBackground();
+    setTimeout(() => {
+      loader.style.display = 'none';
+      // trigger reveal check once main page is visible
+      handleReveal();
+    }, 900);
+  });
+
+  // lock scroll while loader is up
+  document.body.style.overflow = 'hidden';
+
+  // ---------- Background video with graceful fallback ----------
+  const bgVideo = document.getElementById('bg-video');
+  const cssScene = document.getElementById('css-scene');
+
+  function showFallbackScene() {
+    cssScene.classList.add('active');
+    bgVideo.classList.remove('playing');
+    bgVideo.style.display = 'none';
+  }
+
+  function showVideo() {
+    cssScene.classList.remove('active');
+    bgVideo.classList.add('playing');
+  }
+
+  // If the video file isn't present (or fails for any reason), fall back automatically
+  bgVideo.addEventListener('error', showFallbackScene, true);
+  bgVideo.querySelectorAll('source').forEach(src => {
+    src.addEventListener('error', showFallbackScene);
+  });
+  bgVideo.addEventListener('loadeddata', showVideo);
+  bgVideo.addEventListener('canplay', showVideo);
+
+  // Start loading only once the loader is dismissed, and check shortly after
+  // whether it actually has a real source to play.
+  function initBackground() {
+    bgVideo.preload = 'auto';
+    bgVideo.load();
+    setTimeout(() => {
+      if (bgVideo.readyState < 2) { // HAVE_CURRENT_DATA not reached => no usable video
+        showFallbackScene();
+      }
+    }, 1500);
+  }
+
+  // ---------- Build the animated fallback scene (clouds + drifting leaves) ----------
+  function buildFallbackScene() {
+    const cloudCount = 5;
+    for (let i = 0; i < cloudCount; i++) {
+      const c = document.createElement('div');
+      c.className = 'cloud';
+      const w = 90 + Math.random() * 100;
+      const h = w * 0.35;
+      c.style.width = w + 'px';
+      c.style.height = h + 'px';
+      c.style.top = (5 + Math.random() * 20) + '%';
+      const duration = 40 + Math.random() * 30;
+      c.style.animationDuration = duration + 's';
+      c.style.animationDelay = (-Math.random() * duration) + 's';
+      cssScene.appendChild(c);
+    }
+
+    const leafEmojis = ['🍃', '🍂'];
+    const leafCount = 14;
+    for (let i = 0; i < leafCount; i++) {
+      const l = document.createElement('div');
+      l.className = 'leaf-drift';
+      l.textContent = leafEmojis[i % leafEmojis.length];
+      l.style.left = Math.random() * 100 + 'vw';
+      const duration = 10 + Math.random() * 12;
+      l.style.animationDuration = duration + 's';
+      l.style.animationDelay = (-Math.random() * duration) + 's';
+      l.style.fontSize = (14 + Math.random() * 10) + 'px';
+      cssScene.appendChild(l);
+    }
+  }
+  buildFallbackScene();
+
+  // ---------- Scroll reveal animations ----------
+  const revealEls = document.querySelectorAll('.reveal');
+  function handleReveal() {
+    const trigger = window.innerHeight * 0.88;
+    revealEls.forEach(el => {
+      const rect = el.getBoundingClientRect();
+      if (rect.top < trigger) {
+        el.classList.add('in-view');
+      }
+    });
+  }
+  window.addEventListener('scroll', handleReveal, { passive: true });
+  window.addEventListener('resize', handleReveal);
+</script>
+
+</body>
+</html>
